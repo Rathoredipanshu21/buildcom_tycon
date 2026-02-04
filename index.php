@@ -95,7 +95,7 @@
                     </div>
                 </a>
 
-                <a href="franchise/index.php" class="btn-premium group">
+                <a href="Franchise/index.php" class="btn-premium group">
                     <div class="bg-slate-800 text-white p-8 rounded-2xl flex flex-col items-center gap-4 h-full border-2 border-slate-700 group-hover:border-blue-400 transition-all">
                         <div class="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center text-blue-400 text-3xl mb-2 group-hover:bg-blue-400 group-hover:text-white transition-all">
                             <i class="fa-solid fa-store"></i>
