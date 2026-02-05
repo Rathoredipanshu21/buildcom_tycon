@@ -230,6 +230,9 @@ if (!isset($_SESSION['admin'])) {
             <a href="franchise_reports.php" class="sidebar-link" target="content-frame">
                 <i class="fa-solid fa-chart-pie"></i> <span class="nav-text">Analytics</span>
             </a>
+            <a href="profit_loss.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-chart-line"></i> <span class="nav-text">Profit & Loss</span>
+            </a>
         </div>
 
         <div class="p-4 bg-black/10">

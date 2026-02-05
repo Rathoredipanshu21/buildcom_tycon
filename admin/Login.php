@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $row = $result->fetch_assoc();
             if ($password === $row['password']) {
                 $_SESSION['admin'] = $username;
-                header("Location: index.php");
+                header("Location: index");
                 exit();
             } else {
                 $error = "Access Denied: Invalid credentials.";

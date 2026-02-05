@@ -78,8 +78,8 @@ $display_role = $is_master ? "System Director" : "Franchise Partner";
             <a href="stock_maintenance.php" class="sidebar-link" target="content-frame">
                 <i class="fa-solid fa-boxes-stacked"></i> <span>Stock Management</span>
             </a>
-            <a href="transfer_goods.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-truck"></i> <span>Transfer Goods</span>
+            <a href="manage_expenses.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-truck"></i> <span>Manage Expenses</span>
             </a>
 
             <?php if($is_master): ?>

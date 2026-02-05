@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['franchise_id'] = $row['id'];
             $_SESSION['franchise_name'] = $row['store_name'];
             $_SESSION['admin'] = 'franchise'; // Set session key for index.php access
-            header("Location: index.php");
+            header("Location: index");
             exit();
         } else {
             $error = "Access Denied: Invalid credentials or inactive store.";
