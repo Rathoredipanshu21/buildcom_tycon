@@ -1,6 +1,6 @@
 <?php
 session_start();
-// Redirect if not logged in
+// Security Gatekeeper: Ensure Admin is authorized
 if (!isset($_SESSION['admin'])) {
     header("Location: Login.php");
     exit();
@@ -11,41 +11,40 @@ if (!isset($_SESSION['admin'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Portal | Buildcom</title>
+    <title>Master Terminal | Buildcom ERP</title>
     <link rel="icon" type="image/x-icon" href="../Assets/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --sidebar-width: 280px;
             --sidebar-collapsed-width: 80px;
-            --primary-blue: #3b82f6;
-            --sidebar-dark: #0f172a; /* Deep Slate */
-            --sidebar-accent: #1e40af; /* Rich Blue */
+            --primary-blue: #2563EB; /* Specific blue requested */
+            --industrial-dark: #0f172a; /* Deep Slate */
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9;
-            color: #334155;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Blue and White Gradient Combination */
+            background: linear-gradient(135deg, #2563EB 0%, #ffffff 100%);
+            color: #0f172a;
             overflow: hidden;
-            transition: all 0.3s ease;
+            height: 100vh;
         }
 
-        /* --- STYLISH DARK BLUE GRADIENT SIDEBAR --- */
+        /* --- SIDEBAR DESIGN --- */
         .sidebar {
             width: var(--sidebar-width);
-            /* Gradient from dark slate to deep blue */
-            background: linear-gradient(180deg, var(--sidebar-dark) 0%, var(--sidebar-accent) 100%);
+            /* Gradient Sidebar matching the theme */
+            background: linear-gradient(180deg, #2563EB 0%, #0f172a 100%);
             height: 100vh;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
             display: flex;
             flex-direction: column;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
             z-index: 100;
+            border-right: 2px solid #ffffff;
         }
 
         .sidebar.collapsed {
@@ -58,67 +57,58 @@ if (!isset($_SESSION['admin'])) {
             display: none;
         }
 
-        .sidebar.collapsed .sidebar-link {
-            justify-content: center;
-            padding: 12px 0;
-            margin: 4px 10px;
-        }
-
-        .sidebar.collapsed .sidebar-link i {
-            margin-right: 0;
-            font-size: 1.25rem;
-        }
-
         .logo-area {
-            height: 80px;
+            height: 85px;
             display: flex;
             align-items: center;
-            padding: 0 24px;
-            background: rgba(0,0,0,0.1); /* Subtle separation */
+            padding: 0 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-label {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 10px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.5);
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 24px 24px 8px;
+            letter-spacing: 0.2em;
+            padding: 25px 24px 10px;
         }
 
         .sidebar-link {
             display: flex;
             align-items: center;
             padding: 12px 20px;
-            margin: 2px 16px;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-            font-size: 0.9rem;
-            border-radius: 10px;
+            margin: 2px 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            font-size: 13px;
             transition: all 0.2s;
             text-decoration: none;
+            border-radius: 4px;
+            text-transform: uppercase;
         }
 
         .sidebar-link i {
             width: 24px;
             margin-right: 12px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-align: center;
         }
 
         .sidebar-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff;
         }
 
         .sidebar-link.active {
             background-color: #ffffff;
-            color: var(--sidebar-accent);
-            font-weight: 700;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            color: #2563EB;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- NAVBAR & CONTENT --- */
+        /* --- CONTENT INTERFACE --- */
         #main-wrapper {
             flex: 1;
             display: flex;
@@ -128,8 +118,9 @@ if (!isset($_SESSION['admin'])) {
 
         .navbar {
             height: 70px;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #2563EB;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -138,52 +129,58 @@ if (!isset($_SESSION['admin'])) {
 
         .content-frame-container {
             flex: 1;
-            padding: 15px;
+            padding: 12px;
         }
 
         iframe {
             width: 100%;
             height: 100%;
-            border: none;
-            border-radius: 12px;
+            border: 2px solid #0f172a;
             background: white;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            border-radius: 4px;
+            box-shadow: 12px 12px 0px rgba(37, 99, 235, 0.2);
         }
 
-        /* Nav Elements */
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2563EB;
+            padding: 6px 14px;
+            border-radius: 4px;
+        }
+
         .online-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #22c55e;
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
             border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 8px #22c55e;
+            box-shadow: 0 0 8px #4ade80;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.7; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.7; }
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
         }
 
-        .nav-icon-btn {
+        .btn-action {
             width: 42px;
             height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
-            color: #64748b;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: 1px solid transparent;
+            color: #2563EB;
+            border: 1px solid #2563EB;
+            background: white;
+            transition: 0.2s;
+            border-radius: 4px;
         }
 
-        .nav-icon-btn:hover {
-            background-color: #f8fafc;
-            border-color: #e2e8f0;
-            color: var(--primary-blue);
+        .btn-action:hover {
+            background: #2563EB;
+            color: white;
         }
     </style>
 </head>
@@ -191,53 +188,64 @@ if (!isset($_SESSION['admin'])) {
 
     <aside id="sidebar" class="sidebar">
         <div class="logo-area">
-            <div class="bg-white p-1.5 rounded-lg mr-3 shadow-md">
+            <div class="bg-white p-2 border-2 border-blue-600 rounded-sm mr-3">
                 <img src="../Assets/logo.png" alt="Logo" class="w-6 h-6">
             </div>
             <div class="logo-text">
-                <span class="block font-bold text-white tracking-tight text-lg">Buildcom</span>
-                <span class="text-[9px] text-blue-300 font-bold uppercase tracking-[0.2em]">Tycoon Suite</span>
+                <span class="block font-black text-white uppercase tracking-tighter text-xl italic leading-none">Buildcom</span>
+                <span class="text-[9px] text-blue-100 font-bold uppercase tracking-[0.3em]">ERP Terminal</span>
             </div>
         </div>
 
-        <div class="flex-grow overflow-y-auto mt-4">
-            <div class="nav-label">Main Hub</div>
+        <div class="flex-grow overflow-y-auto">
+            <div class="nav-label">Main Operations</div>
             <a href="dashboard.php" class="sidebar-link active" target="content-frame">
-                <i class="fa-solid fa-house"></i> <span class="nav-text">Dashboard</span>
+                <i class="fa-solid fa-gauge-high"></i> <span class="nav-text">Executive Hub</span>
+            </a>
+            <a href="performa.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-chart-line"></i> <span class="nav-text">Sales Performa</span>
             </a>
 
-            <div class="nav-label">Management</div>
+            <div class="nav-label">Finance & Ledger</div>
             <a href="Bill_create.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-receipt"></i> <span class="nav-text">Create Bill</span>
+                <i class="fa-solid fa-plus-square"></i> <span class="nav-text">Create Bill</span>
             </a>
             <a href="all_invoices.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-file-invoice-dollar"></i> <span class="nav-text">Invoices</span>
+                <i class="fa-solid fa-file-invoice"></i> <span class="nav-text">Invoices</span>
             </a>
-            <a href="manage_franchise.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-store"></i> <span class="nav-text">Franchises</span>
-            </a>
-            <a href="manage_products.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-box-open"></i> <span class="nav-text">Inventory</span>
-            </a>
-            <a href="stock_maintenance.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-truck-moving"></i> <span class="nav-text">Stock Maintenance</span>
-            </a>
-
-            <div class="nav-label">Staffing</div>
-            <a href="manage_staff.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-user-tie"></i> <span class="nav-text">Employees</span>
-            </a>
-            <a href="franchise_reports.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-chart-pie"></i> <span class="nav-text">Analytics</span>
+            <a href="admin_ledger_report.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-book-bookmark"></i> <span class="nav-text">Credit Ledger</span>
             </a>
             <a href="profit_loss.php" class="sidebar-link" target="content-frame">
-                <i class="fa-solid fa-chart-line"></i> <span class="nav-text">Profit & Loss</span>
+                <i class="fa-solid fa-scale-balanced"></i> <span class="nav-text">Account P&L</span>
+            </a>
+            <a href="manage_expenses.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-wallet"></i> <span class="nav-text">Manage Expenses</span>
+            </a>
+
+            <div class="nav-label">Inventory & Units</div>
+            <a href="manage_products.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-boxes-stacked"></i> <span class="nav-text">Product Registry</span>
+            </a>
+            <a href="stock_maintenance.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-truck-ramp-box"></i> <span class="nav-text">Supply Control</span>
+            </a>
+            <a href="manage_franchise.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-building-circle-check"></i> <span class="nav-text">Branch Units</span>
+            </a>
+
+            <div class="nav-label">Personnel & Analytics</div>
+            <a href="manage_staff.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-user-gear"></i> <span class="nav-text">Staff Records</span>
+            </a>
+            <a href="franchise_reports.php" class="sidebar-link" target="content-frame">
+                <i class="fa-solid fa-chart-pie"></i> <span class="nav-text">Unit Analytics</span>
             </a>
         </div>
 
-        <div class="p-4 bg-black/10">
-            <a href="logout.php" class="sidebar-link text-red-300 hover:text-white hover:bg-red-500/20 !mx-0">
-                <i class="fa-solid fa-power-off"></i> <span class="nav-text">Logout</span>
+        <div class="p-4 bg-black/40">
+            <a href="logout.php" class="sidebar-link !text-red-400 !mx-0 hover:!bg-red-600 hover:!text-white">
+                <i class="fa-solid fa-power-off"></i> <span class="nav-text">Exit Terminal</span>
             </a>
         </div>
     </aside>
@@ -245,35 +253,31 @@ if (!isset($_SESSION['admin'])) {
     <div id="main-wrapper">
         <header class="navbar">
             <div class="flex items-center gap-4">
-                <button id="toggleBtn" class="nav-icon-btn">
+                <button id="toggleBtn" class="btn-action">
                     <i class="fa-solid fa-bars-staggered"></i>
                 </button>
-                <h2 id="page-title" class="font-bold text-slate-800 text-lg">Dashboard</h2>
+                <h2 id="page-title" class="font-black text-blue-800 uppercase tracking-tight text-lg">Executive Hub</h2>
             </div>
 
-            <div class="flex items-center gap-3">
-                <div class="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full border border-green-100 mr-2">
+            <div class="flex items-center gap-4">
+                <div class="online-status">
                     <span class="online-dot"></span>
-                    <span class="text-[11px] font-bold text-green-600 uppercase">Online</span>
+                    <span class="text-[10px] font-black text-white uppercase tracking-widest">Secure Online</span>
                 </div>
 
-                <div class="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-600 bg-slate-100 px-4 py-2 rounded-xl">
-                    <i class="fa-regular fa-clock text-blue-500"></i>
+                <div class="hidden lg:flex items-center gap-2 text-[11px] font-black text-blue-700 bg-white border border-blue-600 px-4 py-2">
+                    <i class="fa-solid fa-clock text-blue-600"></i>
                     <span id="live-time">00:00:00</span>
                 </div>
 
-                <div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
+                <div class="h-8 w-[1px] bg-blue-200 mx-1"></div>
 
-                <button onclick="toggleFullScreen()" class="nav-icon-btn" title="Expand View">
+                <button onclick="toggleFullScreen()" class="btn-action" title="Full Screen">
                     <i id="fs-icon" class="fa-solid fa-expand"></i>
                 </button>
                 
-                <a href="notifications.php" target="content-frame" class="nav-icon-btn" title="Notifications">
-                    <i class="fa-solid fa-bell"></i>
-                </a>
-
-                <a href="profile.php" target="content-frame" class="ml-2">
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=1e40af&color=fff&bold=true" class="w-10 h-10 rounded-xl shadow-sm border-2 border-white hover:border-blue-200 transition-all">
+                <a href="profile.php" target="content-frame" class="border-2 border-blue-600 p-0.5 ml-2">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=2563EB&color=fff&bold=true" class="w-10 h-10 hover:opacity-80 transition-opacity">
                 </a>
             </div>
         </header>
@@ -289,12 +293,12 @@ if (!isset($_SESSION['admin'])) {
         const pageTitle = document.getElementById('page-title');
         const links = document.querySelectorAll('.sidebar-link');
 
-        // Sidebar Collapse
+        // Sidebar Toggle
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
         });
 
-        // Navigation
+        // Navigation Sync
         links.forEach(link => {
             link.addEventListener('click', function(e) {
                 if(this.getAttribute('href') === 'logout.php') return;
@@ -309,7 +313,7 @@ if (!isset($_SESSION['admin'])) {
             });
         });
 
-        // Fullscreen
+        // Fullscreen Logic
         function toggleFullScreen() {
             const icon = document.getElementById('fs-icon');
             if (!document.fullscreenElement) {
